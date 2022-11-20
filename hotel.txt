@@ -1,0 +1,53 @@
+--CREATE DATABASE hotel_repository;
+
+CREATE TABLE quantity_bed
+(
+    id       SERIAL PRIMARY KEY,
+    quantity INT NOT NULL
+);
+
+CREATE TABLE category_room
+(
+    id       SERIAL PRIMARY KEY,
+    category VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE client
+(
+    id         SERIAL PRIMARY KEY,
+    first_name VARCHAR(40)  NOT NULL,
+    last_name  VARCHAR(40)  NOT NULL,
+    email      VARCHAR(128) NOT NULL,
+    password   VARCHAR(128) NOT NULL
+);
+
+CREATE TABLE room
+(
+    id          SERIAL PRIMARY KEY,
+    number      INT                               NOT NULL,
+    quantity_id INT REFERENCES quantity_bed (id)  NOT NULL,
+    category_id INT REFERENCES category_room (id) NOT NULL,
+    floor       INT                               NOT NULL,
+    day_price   NUMERIC(8, 2)
+);
+
+CREATE TABLE orders
+(
+    id         INT PRIMARY KEY,
+    client_id  INT REFERENCES client (id) NOT NULL,
+    room_id    INT REFERENCES room (id)   NOT NULL,
+    begin_time TIMESTAMP                  NOT NULL,
+    end_time   TIMESTAMP                  NOT NULL,
+    status     VARCHAR(30),
+    message    TEXT
+);
+
+CREATE TABLE rental_time
+(
+    id SERIAL PRIMARY KEY ,
+    room_id INT REFERENCES room (id) NOT NULL,
+    orders_id INT REFERENCES orders(id)  NOT NULL,
+    begin_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL
+
+);
