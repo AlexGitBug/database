@@ -1,0 +1,57 @@
+--CREATE DATABASE hotel_repository;
+
+CREATE TABLE quantity_bed
+(
+    id       SERIAL PRIMARY KEY,
+    quantity VARCHAR(128) NOT NULL
+);
+
+CREATE TABLE category_room
+(
+    id       SERIAL PRIMARY KEY,
+    category VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE room
+(
+    id          SERIAL PRIMARY KEY,
+    number_room INT                               NOT NULL,
+    quantity_id INT REFERENCES quantity_bed (id)  NOT NULL,
+    category_id INT REFERENCES category_room (id) NOT NULL,
+    floor       INT                               NOT NULL,
+    day_price   NUMERIC(8, 2)
+);
+
+
+CREATE TABLE role
+(
+    id        SERIAL PRIMARY KEY,
+    role_info VARCHAR(40) NOT NULL
+);
+
+CREATE TABLE orders
+(
+    id           SERIAL PRIMARY KEY,
+    user_info_id INT REFERENCES user_info (id) NOT NULL,
+    room_id      INT REFERENCES room (id)      NOT NULL,
+    begin_time   TIMESTAMP                     NOT NULL,
+    end_time     TIMESTAMP                     NOT NULL,
+    status       VARCHAR(30),
+    message      TEXT
+);
+
+CREATE TABLE user_info
+(
+    id         SERIAL PRIMARY KEY,
+    first_name VARCHAR(128)             NOT NULL,
+    last_name  VARCHAR(128)             NOT NULL,
+    email      VARCHAR(128)             NOT NULL,
+    amount     INT                      NOT NULL,
+    password   VARCHAR(128)             NOT NULL,
+    role_id    INT REFERENCES role (id) NOT NULL
+
+);
+
+
+
+    ALTER TABLE room RENAME COLUMN number TO number_room;
